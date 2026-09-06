@@ -7,6 +7,8 @@ const getRefreshSecret = () => process.env.JWT_REFRESH_SECRET || process.env.JWT
 
 const generateAccessToken = (user) => {
   return jwt.sign(
+    { userId: user._id, tokenVersion: user.tokenVersion },
+    process.env.JWT_SECRET,
     { userId: user._id, tokenVersion: user.tokenVersion || 0 },
     getJwtSecret(),
     { expiresIn: '15m' }
@@ -15,6 +17,8 @@ const generateAccessToken = (user) => {
 
 const generateRefreshToken = (user) => {
   return jwt.sign(
+    { userId: user._id, tokenVersion: user.tokenVersion },
+    process.env.JWT_REFRESH_SECRET,
     { userId: user._id, tokenVersion: user.tokenVersion || 0 },
     getRefreshSecret(),
     { expiresIn: '7d' }
@@ -34,6 +38,7 @@ exports.signup = async (req, res) => {
       return res.status(409).json({ message: 'Email already in use' });
     }
 
+    const passwordHash = await bcrypt.hash(password, 10);
     const passwordHash = bcrypt.hashSync(password, 10);
     const user = await User.create({ name, email, passwordHash });
 
@@ -65,6 +70,7 @@ exports.login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
+    const isMatch = await bcrypt.compare(password, user.passwordHash);
     const isMatch = bcrypt.compareSync(password, user.passwordHash);
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid email or password' });

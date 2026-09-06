@@ -1,0 +1,188 @@
+@import '../../styles/variables.css';
+
+.custom-recipe-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-height: 75vh;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.modal-error-alert {
+  background-color: var(--color-warning-light);
+  color: var(--color-warning);
+  padding: 10px 14px;
+  border-radius: var(--radius-base);
+  font-size: 0.88rem;
+  font-weight: 500;
+  border: 1px solid rgba(230, 81, 0, 0.2);
+}
+
+.modal-form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: var(--color-bg);
+  padding: 16px;
+  border-radius: var(--radius-base);
+  border: 1px solid var(--color-border);
+}
+
+.modal-section-title {
+  margin: 0 0 4px 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-display);
+}
+
+.form-grid-3 {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .form-grid-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.preset-images-label {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.preset-images-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.preset-btn {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-card);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.preset-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.preset-btn.active {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  font-weight: 600;
+}
+
+.diet-tags-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.diet-tag-btn {
+  padding: 6px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+  background: var(--color-card);
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  text-transform: capitalize;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.diet-tag-btn.active {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border-color: var(--color-primary);
+  font-weight: 600;
+}
+
+.builder-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.builder-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-flex-2 { flex: 2; }
+.input-flex-1 { flex: 1; }
+
+.step-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.row-delete-btn {
+  background: none;
+  border: none;
+  color: var(--color-warning);
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.row-delete-btn:hover {
+  background-color: var(--color-warning-light);
+}
+
+.add-builder-btn {
+  background: none;
+  border: 1px dashed var(--color-primary);
+  color: var(--color-primary);
+  padding: 8px 14px;
+  border-radius: var(--radius-base);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  transition: all 0.2s ease;
+}
+
+.add-builder-btn:hover {
+  background-color: var(--color-primary-light);
+}
+
+.modal-actions-bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+}
