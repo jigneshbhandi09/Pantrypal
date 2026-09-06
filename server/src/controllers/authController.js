@@ -1,3 +1,4 @@
+// PantryPal Auth Controller - v2.0
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
@@ -34,8 +35,8 @@ exports.signup = async (req, res) => {
       return res.status(409).json({ message: 'Email already in use' });
     }
 
-    const passwordHash = bcrypt.hashSync(password, 10);
-    const user = await User.create({ name, email, passwordHash });
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    const user = await User.create({ name, email, passwordHash: hashedPassword });
 
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
