@@ -3,6 +3,9 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
 
+// Connect DB (serverless re-use friendly)
+connectDB().catch(err => console.error('DB connect error:', err));
+
 const app = express();
 
 app.use(cors({

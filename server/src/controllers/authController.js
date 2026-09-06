@@ -7,6 +7,8 @@ const getRefreshSecret = () => process.env.JWT_REFRESH_SECRET || process.env.JWT
 
 const generateAccessToken = (user) => {
   return jwt.sign(
+    { userId: user._id, tokenVersion: user.tokenVersion },
+    process.env.JWT_SECRET,
     { userId: user._id, tokenVersion: user.tokenVersion || 0 },
     getJwtSecret(),
     { expiresIn: '15m' }
@@ -15,6 +17,8 @@ const generateAccessToken = (user) => {
 
 const generateRefreshToken = (user) => {
   return jwt.sign(
+    { userId: user._id, tokenVersion: user.tokenVersion },
+    process.env.JWT_REFRESH_SECRET,
     { userId: user._id, tokenVersion: user.tokenVersion || 0 },
     getRefreshSecret(),
     { expiresIn: '7d' }
