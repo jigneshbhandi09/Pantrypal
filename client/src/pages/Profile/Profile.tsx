@@ -7,6 +7,7 @@ import type { Recipe } from '../../types/Recipe';
 import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner';
 import { Button } from '../../components/Button/Button';
 import { Toast } from '../../components/Toast/Toast';
+import { User as UserIcon, Shield, Sparkles, Save, Plus, X } from 'lucide-react';
 import { RecipeCard } from '../../components/RecipeCard/RecipeCard';
 import { Modal } from '../../components/Modal/Modal';
 import { CustomRecipeModal } from '../../components/CustomRecipeModal/CustomRecipeModal';
@@ -37,6 +38,7 @@ const DIETARY_OPTIONS = [
 ];
 
 export const Profile: React.FC = () => {
+  const { updateUser } = useAuth();
   const { user, updateUser } = useAuth();
   const [activeTab, setActiveTab] = useState<'preferences' | 'recipes'>('preferences');
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -87,6 +89,20 @@ export const Profile: React.FC = () => {
   };
 
   useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        setIsLoading(true);
+        const data = await getProfile();
+        setName(data.name || '');
+        setEmail(data.email || '');
+        setSelectedDiets(data.dietaryPreferences || []);
+        setAllergies(data.allergies || []);
+      } catch (err) {
+        setToast({ message: "Couldn't load user profile", type: 'error' });
+      } finally {
+        setIsLoading(false);
+      }
+    };
     fetchUserData();
   }, []);
 
@@ -151,10 +167,19 @@ export const Profile: React.FC = () => {
   };
 
   if (isLoading) {
+    return <LoadingSpinner message="Loading user profile..." size="medium" />;
     return <LoadingSpinner message="Loading user profile & preferences..." size="medium" />;
   }
 
   return (
+    <div className="profile-page">
+      <div className="profile-container">
+        <div className="profile-header">
+          <h1 className="profile-title">Account & Preferences</h1>
+          <p className="profile-subtitle">
+            Configure your dietary preferences and allergies to guide Gemini AI recipe suggestions.
+          </p>
+        </div>
     <div className="profile-page-pro">
       <div className="profile-pro-container">
         
@@ -166,6 +191,12 @@ export const Profile: React.FC = () => {
               <span>{getInitials(name)}</span>
             </div>
 
+        <form onSubmit={handleSaveProfile} className="profile-card">
+          {/* Personal Info */}
+          <div className="profile-section">
+            <h3 className="section-title">
+              <UserIcon size={20} className="section-icon" /> Personal Details
+            </h3>
             <div className="profile-hero-info">
               <div className="profile-name-row">
                 <h1 className="profile-hero-name">{name || 'Chef User'}</h1>
@@ -180,6 +211,14 @@ export const Profile: React.FC = () => {
             </div>
           </div>
 
+            <div className="form-group">
+              <label htmlFor="user-name">Full Name</label>
+              <input
+                id="user-name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
           {/* Quick Metrics Bar */}
           <div className="profile-stats-bar">
             <div className="stat-card">
@@ -192,6 +231,10 @@ export const Profile: React.FC = () => {
               </div>
             </div>
 
+            <div className="form-group">
+              <label htmlFor="user-email">Email Address</label>
+              <input id="user-email" type="email" value={email} disabled className="disabled-input" />
+              <span className="field-hint">Email address cannot be changed.</span>
             <div className="stat-card">
               <div className="stat-icon-wrap secondary">
                 <ChefHat size={20} />
@@ -214,6 +257,12 @@ export const Profile: React.FC = () => {
           </div>
         </div>
 
+          {/* Dietary Preferences */}
+          <div className="profile-section">
+            <h3 className="section-title">
+              <Sparkles size={20} className="section-icon secondary" /> Dietary Preferences
+            </h3>
+            <p className="section-desc">Select any dietary guidelines you strictly follow.</p>
         {/* Tab Navigation */}
         <div className="profile-tabs-nav">
           <button
@@ -230,6 +279,20 @@ export const Profile: React.FC = () => {
           </button>
         </div>
 
+            <div className="diet-chips-grid">
+              {DIETARY_OPTIONS.map((diet) => {
+                const isSelected = selectedDiets.includes(diet);
+                return (
+                  <button
+                    key={diet}
+                    type="button"
+                    className={`diet-chip ${isSelected ? 'selected' : ''}`}
+                    onClick={() => handleToggleDiet(diet)}
+                  >
+                    {diet}
+                  </button>
+                );
+              })}
         {/* TAB 1: PREFERENCES & ACCOUNT */}
         {activeTab === 'preferences' && (
           <form onSubmit={handleSaveProfile} className="profile-main-card">
@@ -265,7 +328,14 @@ export const Profile: React.FC = () => {
                 </div>
               </div>
             </div>
+          </div>
 
+          {/* Allergies */}
+          <div className="profile-section">
+            <h3 className="section-title">
+              <Shield size={20} className="section-icon danger" /> Food Allergies & Intolerances
+            </h3>
+            <p className="section-desc">Add specific ingredients to exclude from AI recommendations.</p>
             {/* Dietary Preferences Section */}
             <div className="profile-card-section">
               <h3 className="card-section-title">
@@ -275,6 +345,21 @@ export const Profile: React.FC = () => {
                 Select your dietary restrictions. Gemini AI will automatically prioritize these rules when suggesting recipes.
               </p>
 
+            <div className="allergy-input-row">
+              <input
+                type="text"
+                placeholder="e.g. Peanuts, Shellfish, Soy..."
+                value={newAllergyInput}
+                onChange={(e) => setNewAllergyInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleAddAllergy();
+                  }
+                }}
+              />
+              <Button type="button" variant="outline" onClick={handleAddAllergy} icon={<Plus size={16} />}>
+                Add
               <div className="diet-chips-wrap">
                 {DIETARY_OPTIONS.map((diet) => {
                   const isSelected = selectedDiets.includes(diet);
@@ -341,6 +426,15 @@ export const Profile: React.FC = () => {
           </form>
         )}
 
+            <div className="allergy-tags-wrap">
+              {allergies.map((allergy) => (
+                <span key={allergy} className="allergy-tag">
+                  {allergy}
+                  <button type="button" onClick={() => handleRemoveAllergy(allergy)}>
+                    <X size={14} />
+                  </button>
+                </span>
+              ))}
         {/* TAB 2: MY CUSTOM RECIPES */}
         {activeTab === 'recipes' && (
           <div className="profile-main-card">
@@ -355,7 +449,12 @@ export const Profile: React.FC = () => {
                 Create Custom Recipe
               </Button>
             </div>
+          </div>
 
+          <div className="profile-save-bar">
+            <Button type="submit" isLoading={isSubmitting} size="large" icon={<Save size={18} />}>
+              Save Preferences
+            </Button>
             {userRecipes.length === 0 ? (
               <div className="empty-user-recipes">
                 <Utensils size={48} className="empty-icon" />
@@ -373,6 +472,7 @@ export const Profile: React.FC = () => {
               </div>
             )}
           </div>
+        </form>
         )}
       </div>
 
@@ -440,3 +540,4 @@ export const Profile: React.FC = () => {
     </div>
   );
 };
+

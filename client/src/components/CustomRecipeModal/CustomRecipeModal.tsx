@@ -366,3 +366,4 @@ export const CustomRecipeModal: React.FC<CustomRecipeModalProps> = ({ isOpen, on
     </Modal>
   );
 };
+

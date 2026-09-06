@@ -1,12 +1,20 @@
 @import '../../styles/variables.css';
 
+.profile-page {
 .profile-page-pro {
   padding: 32px 24px;
+  background-color: var(--bg-main);
+  min-height: calc(100vh - 68px);
+  padding: 36px 24px;
+  padding: 36px 32px;
   background-color: var(--color-bg);
   min-height: calc(100vh - 72px);
+  min-height: 100vh;
   box-sizing: border-box;
 }
 
+.profile-container {
+  max-width: 800px;
 .profile-pro-container {
   max-width: 960px;
   margin: 0 auto;
@@ -15,6 +23,8 @@
   gap: 24px;
 }
 
+.profile-header {
+  margin-bottom: 28px;
 /* HERO CARD */
 .profile-hero-card {
   position: relative;
@@ -25,6 +35,8 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
+.profile-title {
+  margin: 0 0 6px 0;
 .profile-hero-bg {
   height: 100px;
   background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 50%, #52b788 100%);
@@ -75,10 +87,15 @@
   margin: 0;
   font-size: 1.8rem;
   font-weight: 800;
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: 2.2rem;
+  font-weight: 700;
   color: var(--color-primary);
   font-family: var(--font-display);
 }
 
+.profile-subtitle {
 .profile-role-badge {
   display: inline-flex;
   align-items: center;
@@ -96,9 +113,18 @@
 .profile-hero-email {
   margin: 0;
   font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-family: var(--font-family);
   color: var(--color-text-muted);
+  font-family: var(--font-body);
 }
 
+.profile-card {
+  background: var(--bg-card);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  padding: 32px;
+  box-shadow: var(--box-shadow);
 .profile-join-meta {
   display: flex;
   align-items: center;
@@ -219,6 +245,7 @@
   background: var(--color-card);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
+  padding: 36px;
   padding: 32px;
   display: flex;
   flex-direction: column;
@@ -226,16 +253,21 @@
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
 }
 
+.profile-section {
 .profile-card-section {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
+.section-title {
 .card-section-title {
   margin: 0;
+  font-size: 1.15rem;
   font-size: 1.2rem;
   font-weight: 700;
+  color: var(--text-primary);
+  font-family: var(--font-family);
   color: var(--color-primary);
   font-family: var(--font-display);
   display: flex;
@@ -243,10 +275,21 @@
   gap: 8px;
 }
 
+.section-icon { color: var(--primary-color); }
+.section-icon.secondary { color: var(--secondary-color); }
+.section-icon.danger { color: var(--danger-color); }
+.section-icon { color: var(--color-primary); }
+.section-icon.secondary { color: var(--color-accent); }
+.section-icon.danger { color: var(--color-warning); }
 .section-icon.primary { color: var(--color-primary); }
 .section-icon.secondary { color: #d97706; }
 .section-icon.danger { color: #dc2626; }
 
+.section-desc {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-family: var(--font-family);
 .card-section-desc {
   margin: -6px 0 0 0;
   font-size: 0.88rem;
@@ -266,6 +309,8 @@
 }
 
 .disabled-input {
+  background-color: var(--bg-main);
+  color: var(--text-muted);
   background-color: var(--color-bg);
   color: var(--color-text-muted);
   cursor: not-allowed;
@@ -273,10 +318,13 @@
 
 .field-hint {
   font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: var(--font-family);
   color: var(--color-text-muted);
   margin-top: 4px;
 }
 
+.diet-chips-grid {
 /* DIET CHIPS */
 .diet-chips-wrap {
   display: flex;
@@ -284,55 +332,82 @@
   gap: 10px;
 }
 
+.diet-chip {
 .diet-chip-pro {
   text-transform: capitalize;
+  padding: 8px 16px;
   padding: 8px 18px;
   border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-card);
   border: 1px solid var(--color-border);
   background-color: var(--color-card);
+  font-size: 0.85rem;
   font-size: 0.88rem;
   font-weight: 600;
+  color: var(--text-secondary);
   color: var(--color-text-muted);
   cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: var(--font-family);
+  font-family: var(--font-body);
   transition: all 0.2s ease;
 }
 
+.diet-chip:hover {
+  background-color: #f0f0f0;
 .diet-chip-pro:hover {
   background-color: var(--color-primary-light);
   color: var(--color-primary);
   border-color: var(--color-primary);
 }
 
+.diet-chip.selected {
+  background-color: var(--secondary-color);
+  color: white;
+  border-color: var(--secondary-color);
 .diet-chip-pro.selected {
   background-color: var(--color-primary);
+  color: #FFFFFF;
   color: #ffffff;
   border-color: var(--color-primary);
   box-shadow: 0 2px 8px rgba(45, 106, 79, 0.25);
 }
 
+.allergy-input-row {
 /* ALLERGIES */
 .allergy-input-group {
   display: flex;
   gap: 10px;
+  max-width: 440px;
   max-width: 480px;
 }
 
+.allergy-input-row input {
 .allergy-input-group input {
   flex: 1;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
   padding: 10px 14px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-base);
   font-size: 0.9rem;
+  font-family: var(--font-family);
+  font-family: var(--font-body);
 }
 
+.allergy-tags-wrap {
 .allergy-tags-container {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin-top: 4px;
   min-height: 36px;
   align-items: center;
 }
 
+.allergy-tag {
 .no-allergies-hint {
   font-size: 0.85rem;
   color: var(--color-text-muted);
@@ -343,18 +418,29 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  background-color: var(--danger-light);
+  color: var(--danger-color);
+  background-color: var(--color-warning-light);
+  color: var(--color-warning);
+  padding: 6px 12px;
+  border-radius: 16px;
   background-color: rgba(220, 38, 38, 0.1);
   color: #dc2626;
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 600;
+  font-family: var(--font-family);
+  font-family: var(--font-body);
   border: 1px solid rgba(220, 38, 38, 0.2);
 }
 
+.allergy-tag button {
 .allergy-pill-pro button {
   background: none;
   border: none;
+  color: var(--danger-color);
+  color: var(--color-warning);
   color: #dc2626;
   cursor: pointer;
   padding: 0;
@@ -363,9 +449,12 @@
   justify-content: center;
 }
 
+.profile-save-bar {
 .profile-card-footer {
   display: flex;
   justify-content: flex-end;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
   padding-top: 20px;
   border-top: 1px solid var(--color-border);
 }

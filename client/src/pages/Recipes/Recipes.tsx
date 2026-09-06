@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { getRecipes, createRecipe } from '../../api/recipes';
 import { getRecipes } from '../../api/recipes';
 import type { Recipe } from '../../types/Recipe';
 import { RecipeCard } from '../../components/RecipeCard/RecipeCard';
@@ -22,7 +23,21 @@ export const Recipes: React.FC = () => {
   const [selectedDiet, setSelectedDiet] = useState<string>('All');
 
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [cuisine, setCuisine] = useState('Italian');
+  const [prepTime, setPrepTime] = useState<number>(15);
+  const [cookTime, setCookTime] = useState<number>(20);
+  const [servings, setServings] = useState<number>(2);
+
+  const [ingredients, setIngredients] = useState<{ name: string; quantity: number; unit: string }[]>([
+    { name: '', quantity: 1, unit: 'pcs' },
+  ]);
+  const [instructions, setInstructions] = useState<string[]>(['']);
+
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   const fetchCatalog = async () => {
@@ -51,9 +66,53 @@ export const Recipes: React.FC = () => {
     fetchCatalog();
   };
 
+  const handleAddIngredientRow = () => {
+    setIngredients([...ingredients, { name: '', quantity: 1, unit: 'pcs' }]);
   const handleRecipeCreated = (newRecipe: Recipe) => {
     setToast({ message: `"${newRecipe.title}" created successfully!`, type: 'success' });
     fetchCatalog();
+  };
+
+  const handleAddInstructionRow = () => {
+    setInstructions([...instructions, '']);
+  };
+
+  const handleCreateRecipe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title.trim()) {
+      setToast({ message: 'Recipe title is required', type: 'error' });
+      return;
+    }
+
+    const validIngredients = ingredients.filter((i) => i.name.trim().length > 0);
+    const validInstructions = instructions.filter((ins) => ins.trim().length > 0);
+
+    if (validIngredients.length === 0 || validInstructions.length === 0) {
+      setToast({ message: 'Please add at least one ingredient and one instruction step', type: 'error' });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await createRecipe({
+        title: title.trim(),
+        description: description.trim(),
+        cuisine,
+        prepTimeMinutes: prepTime,
+        cookTimeMinutes: cookTime,
+        servings,
+        ingredients: validIngredients,
+        instructions: validInstructions,
+      });
+
+      setToast({ message: 'Recipe created successfully!', type: 'success' });
+      setIsAddModalOpen(false);
+      fetchCatalog();
+    } catch (err: any) {
+      setToast({ message: err.response?.data?.message || 'Failed to create recipe', type: 'error' });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -176,14 +235,151 @@ export const Recipes: React.FC = () => {
         </Modal>
       )}
 
+      <Modal
       {/* Reusable Custom Recipe Modal */}
       <CustomRecipeModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
+        title="Create Custom Recipe"
+      >
+        <form onSubmit={handleCreateRecipe} className="custom-recipe-form">
+          <div className="form-group">
+            <label>Recipe Title *</label>
+            <input
+              type="text"
+              placeholder="e.g. Creamy Tuscan Garlic Chicken"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
         onSuccess={handleRecipeCreated}
       />
+
+          <div className="form-group">
+            <label>Description</label>
+            <textarea
+              placeholder="Brief description of the dish..."
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={2}
+            />
+          </div>
+
+          <div className="form-row">
+            <div className="form-group flex-1">
+              <label>Cuisine</label>
+              <input
+                type="text"
+                placeholder="Italian, Mexican..."
+                value={cuisine}
+                onChange={(e) => setCuisine(e.target.value)}
+              />
+            </div>
+            <div className="form-group flex-1">
+              <label>Prep Time (mins)</label>
+              <input
+                type="number"
+                value={prepTime}
+                onChange={(e) => setPrepTime(parseInt(e.target.value) || 0)}
+              />
+            </div>
+            <div className="form-group flex-1">
+              <label>Cook Time (mins)</label>
+              <input
+                type="number"
+                value={cookTime}
+                onChange={(e) => setCookTime(parseInt(e.target.value) || 0)}
+              />
+            </div>
+            <div className="form-group flex-1">
+              <label>Servings</label>
+              <input
+                type="number"
+                value={servings}
+                onChange={(e) => setServings(parseInt(e.target.value) || 1)}
+              />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>Ingredients *</label>
+            {ingredients.map((ing, idx) => (
+              <div key={idx} className="dynamic-row">
+                <input
+                  type="text"
+                  placeholder="Ingredient name"
+                  value={ing.name}
+                  onChange={(e) => {
+                    const copy = [...ingredients];
+                    copy[idx].name = e.target.value;
+                    setIngredients(copy);
+                  }}
+                  className="flex-2"
+                />
+                <input
+                  type="number"
+                  placeholder="Qty"
+                  value={ing.quantity}
+                  onChange={(e) => {
+                    const copy = [...ingredients];
+                    copy[idx].quantity = parseFloat(e.target.value) || 1;
+                    setIngredients(copy);
+                  }}
+                  className="flex-1"
+                />
+                <input
+                  type="text"
+                  placeholder="Unit (e.g. pcs, cup)"
+                  value={ing.unit}
+                  onChange={(e) => {
+                    const copy = [...ingredients];
+                    copy[idx].unit = e.target.value;
+                    setIngredients(copy);
+                  }}
+                  className="flex-1"
+                />
+              </div>
+            ))}
+            <button type="button" onClick={handleAddIngredientRow} className="add-row-btn">
+              + Add Ingredient
+            </button>
+          </div>
+
+          <div className="form-group">
+            <label>Step-by-Step Instructions *</label>
+            {instructions.map((ins, idx) => (
+              <div key={idx} className="dynamic-row">
+                <span className="step-num">{idx + 1}.</span>
+                <input
+                  type="text"
+                  placeholder={`Step ${idx + 1} instructions...`}
+                  value={ins}
+                  onChange={(e) => {
+                    const copy = [...instructions];
+                    copy[idx] = e.target.value;
+                    setInstructions(copy);
+                  }}
+                />
+              </div>
+            ))}
+            <button type="button" onClick={handleAddInstructionRow} className="add-row-btn">
+              + Add Step
+            </button>
+          </div>
+
+          <div className="form-actions">
+            <Button type="button" variant="outline" onClick={() => setIsAddModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" isLoading={isSubmitting}>
+              Save Recipe
+            </Button>
+          </div>
+        </form>
+      </Modal>
 
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </div>
   );
 };
+
