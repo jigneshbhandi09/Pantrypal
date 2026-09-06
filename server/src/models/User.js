@@ -14,7 +14,4 @@ const userSchema = new Schema({
   tokenVersion: { type: Number, default: 0 }
 }, { timestamps: true });
 
-userSchema.index({ email: 1 }, { unique: true });
-
 module.exports = mongoose.model('User', userSchema);
-
