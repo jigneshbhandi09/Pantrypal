@@ -1,0 +1,34 @@
+@import './styles/variables.css';
+
+.app-root {
+  min-height: 100vh;
+  width: 100vw;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.app-root.with-sidebar {
+  display: flex;
+  flex-direction: row;
+}
+
+.app-root.auth-mode {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main-content {
+  flex: 1;
+  min-width: 0;
+  background-color: var(--color-bg);
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.app-auth-main {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

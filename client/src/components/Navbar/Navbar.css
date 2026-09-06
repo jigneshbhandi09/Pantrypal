@@ -1,0 +1,189 @@
+@import '../../styles/variables.css';
+
+.navbar-header {
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 68px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--primary-color);
+  color: var(--color-primary);
+}
+
+.brand-icon {
+  color: var(--primary-color);
+  color: var(--color-primary);
+}
+
+.brand-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: var(--font-display);
+  color: var(--color-primary);
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+  font-family: var(--font-family);
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  gap: 24px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--border-radius-sm);
+  gap: 8px;
+  padding: 8px 0;
+  position: relative;
+  text-decoration: none;
+  font-family: var(--font-family);
+  font-size: 0.9rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  color: var(--color-text-muted);
+  transition: color var(--transition-fast);
+}
+
+.nav-item:hover {
+  color: var(--primary-color);
+  background-color: var(--primary-light);
+  color: var(--color-primary);
+}
+
+/* Active Underline indicator style */
+.nav-item.active {
+  color: var(--primary-color);
+  background-color: var(--primary-light);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.cook-now-btn {
+  color: var(--secondary-color);
+  background-color: var(--secondary-light);
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: var(--color-accent);
+  border-radius: 2px;
+}
+
+.cook-now-btn:hover {
+  color: var(--secondary-hover);
+  background-color: #ffe0b2;
+}
+
+.cook-now-btn.active {
+  color: var(--secondary-hover);
+  background-color: #ffe0b2;
+.cook-now-btn {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.navbar-user-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  gap: 16px;
+}
+
+.user-profile-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-base);
+  transition: background-color var(--transition-fast);
+}
+
+.user-profile-link:hover {
+  background-color: var(--bg-main);
+  background-color: var(--color-primary-light);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  font-size: 1rem;
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  transition: all var(--transition-fast);
+  transition: color var(--transition-fast);
+}
+
+.logout-button:hover {
+  color: var(--danger-color);
+  background-color: var(--danger-light);
+  color: var(--color-warning);
+}
+

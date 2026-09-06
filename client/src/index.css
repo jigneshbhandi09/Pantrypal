@@ -1,0 +1,40 @@
+@import './styles/variables.css';
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6, .font-display {
+  font-family: var(--font-display);
+}
+
+p, span, label, input, button, select, textarea {
+  font-family: var(--font-body);
+}
