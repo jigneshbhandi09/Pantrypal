@@ -3,9 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
 
-// Connect DB (serverless re-use friendly)
-connectDB().catch(err => console.error('DB connect error:', err));
-
 const app = express();
 
 app.use(cors({
@@ -15,13 +12,14 @@ app.use(express.json());
 
 // Ensure MongoDB is connected before processing any API request
 app.use(async (req, res, next) => {
+  if (req.path === '/api/health') return next();
   try {
     await connectDB();
     next();
   } catch (err) {
-    console.error('Database connection error in request middleware:', err);
+    console.error('Database connection error in middleware:', err.message);
     res.status(500).json({
-      message: 'Database connection failed. Please ensure MongoDB Atlas IP whitelist includes 0.0.0.0/0.',
+      message: 'Database connection failed. Please verify MONGO_URI in Vercel settings and ensure MongoDB Atlas IP Whitelist includes 0.0.0.0/0.',
       error: err.message
     });
   }

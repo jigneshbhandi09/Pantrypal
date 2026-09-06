@@ -7,13 +7,18 @@ const connectDB = async () => {
     isConnected = true;
     return;
   }
+  const mongoUri = process.env.MONGO_URI;
+  if (!mongoUri) {
+    throw new Error('MONGO_URI is missing in Vercel Environment Variables.');
+  }
   try {
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(mongoUri, {
+      serverSelectionTimeoutMS: 5000,
+    });
     isConnected = true;
-    console.log('MongoDB connected');
+    console.log('MongoDB connected successfully');
   } catch (err) {
     console.error('MongoDB connection error:', err.message);
-    process.exit(1);
     throw err;
   }
 };
