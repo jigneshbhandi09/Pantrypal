@@ -2,18 +2,21 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+const getJwtSecret = () => process.env.JWT_SECRET || 'pantrypal_default_jwt_secret_key_2026';
+const getRefreshSecret = () => process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET || 'pantrypal_default_refresh_secret_key_2026';
+
 const generateAccessToken = (user) => {
   return jwt.sign(
-    { userId: user._id, tokenVersion: user.tokenVersion },
-    process.env.JWT_SECRET,
+    { userId: user._id, tokenVersion: user.tokenVersion || 0 },
+    getJwtSecret(),
     { expiresIn: '15m' }
   );
 };
 
 const generateRefreshToken = (user) => {
   return jwt.sign(
-    { userId: user._id, tokenVersion: user.tokenVersion },
-    process.env.JWT_REFRESH_SECRET,
+    { userId: user._id, tokenVersion: user.tokenVersion || 0 },
+    getRefreshSecret(),
     { expiresIn: '7d' }
   );
 };
@@ -44,6 +47,7 @@ exports.signup = async (req, res) => {
       refreshToken
     });
   } catch (err) {
+    console.error('Signup error:', err);
     res.status(500).json({ message: 'Signup failed', error: err.message });
   }
 };
@@ -76,6 +80,7 @@ exports.login = async (req, res) => {
       refreshToken
     });
   } catch (err) {
+    console.error('Login error:', err);
     res.status(500).json({ message: 'Login failed', error: err.message });
   }
 };

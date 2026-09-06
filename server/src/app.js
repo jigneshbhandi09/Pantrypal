@@ -3,15 +3,26 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
 
-// Connect DB (serverless re-use friendly)
-connectDB().catch(err => console.error('DB connect error:', err));
-
 const app = express();
 
 app.use(cors({
   origin: process.env.CLIENT_ORIGIN || '*'
 }));
 app.use(express.json());
+
+// Ensure MongoDB is connected before processing any API request
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error('Database connection error in request middleware:', err);
+    res.status(500).json({
+      message: 'Database connection failed. Please ensure MongoDB Atlas IP whitelist includes 0.0.0.0/0.',
+      error: err.message
+    });
+  }
+});
 
 const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
